@@ -11,6 +11,12 @@ interface AuthState {
 //ingat ada reducer ada stateAwal initial state, dan action  dan kembalian state tadi (typeState tadi) 
 //dalam hal ini adalah autStathe ,initialState adalah isian nilai aawal dari AuthState 
 
+interface LoginPayload {
+  username:string;
+  nomer:string;
+
+}
+
 const initialState ={
     validate:true,
     token:null,
@@ -18,37 +24,30 @@ const initialState ={
     nomer:''
 }
 
-//utk reducer kita namakan auth reducer skali lagi reducer adalah function yg akan tangani 
-//action utk uhbag initial state kita bisa kita tuls sbb:
-// const authReducer =():typeof initialState =>{
-//     return initialState
-// }
 
 
-//dari pada nulis initialState gampangannya kan sama itu typenya dgn yg dari interface 
-//maka returnya tetap pakai yg interface diatas sbagai type data yg direturn 
-/*
-conts authReducer=():AuthState=> {
-    //AuthState diatas adalah data kembalianya 
-}
-*/
-//nah argument yg masuk direducer authReducer ini akan selalu sama yaitu state dan action
 
-//utk action kita mendeclarenya sbgai object literatal berisi type  nama2 action 
-//yg akan dikirim nah direducer terima ini acton type dari type object literatl yg kita declare 
-//nah reducer membuat pilihan sgn switch atau dgn if then ellse utk milah2 type action yg datang 
-//dan ligic akan dilakuakn hasilnya adalah state param akan berubah dan akan di return balik 
-//dari reducer ke program utama
+type AuthAction =
+| {type:'logout'}
+//| {type:'login',payload:{username:string,nomer:string}}; 
+|{type:'login',payload:LoginPayload}
 
-type AuthAction ={type:'logout'}; //nnti ngambil object didalam menjadi
-// AuthAction.type krn lewat param nama action jadi menjadi 
-//action = {type:'logout' } jadi = actuion.type 
+//yg diatas {type:'login',payload:{username:string,nomer:string}}; 
+//kita bisa baut interfacenya yaitu mis loginPaload menjadi  
+//LoginPayload:{
+//username:string,nomer:string
+//}
 
-//useEffecct utk triger kita pakai useEffect dimislakna ada user yg tekan logout ke server senigga 
-//kasih tahu ke client utk aplikasi ditutup 
+//ini bawah state bisa di distraact sblah kiri kalau mau munculkan variable dgn tidak tulis state.validate
+//atau state.token etc nah cara 
+//const authReducer =(state:AuthState,action:AuthAction):AuthState => {
+//itu state diatas di distract jadi :
+//  const authReducer =({validate,token,username,nomer}:AuthState,action:AuthAction):AuthState => {
 
 
+//const authReducer =(state:AuthState,action:AuthAction):AuthState => { diubah jadi :
 const authReducer =(state:AuthState,action:AuthAction):AuthState => {
+
   switch(action.type) {
     case 'logout':
         //harus return dan harus ada state yg di ubah dan wajib ada return 
@@ -59,8 +58,20 @@ const authReducer =(state:AuthState,action:AuthAction):AuthState => {
             username:'',
             nomer:''
         }
+        case "login":
+          //destruc action .payload 
+          const {nomer,username} = action.payload;
+          return {
+            validate:false,
+            token:"ABC123",
+            //username:action.payload.username,
+            //nomer:action.payload.nomer
+            //bisa disingkat dengan destruct diatas 
+            username:username,
+            nomer:nomer
+          }
      default:
-        return state   
+        return state
 
   }
 
@@ -70,20 +81,38 @@ const authReducer =(state:AuthState,action:AuthAction):AuthState => {
 
 export const Login = () => {
     //declarasi reducer sma dalam kalan functon main 
-    const [state,dispatch] = useReducer(authReducer,initialState)
+    const [{validate,token,username,nomer},dispatch] = useReducer(authReducer,initialState)
     //kita pakai useEffect utk triger 
     useEffect(()=> {
         setTimeout(()=>{
            dispatch({type:'logout'})
         },1500)
-    })
+    },[])
 
      /*
-        perahtion! utk state diatas jika 
+        utk mendispacth kit abuat nama function nah nnti fucntion tsb bisa di triger lewat useEffect
+        atau ditriger lewat event click 
+
      */
 
+     const logout =()=> {
+      dispatch({
+        type:"logout"
+      })
+     }
 
-    if (state.validate) {
+
+     const login =()=> {
+      dispatch({
+        type:'login',
+        payload:{
+          username:'Indras surya',
+          nomer:'A321'
+        }
+      })
+     }
+
+    if (validate) {
         return (
             <>
              <div className="alert alert-info">
@@ -95,19 +124,32 @@ export const Login = () => {
 
   return (
     <h3>Login
-    <div className="alert alert-info">
-       Tervalidasi 
-    </div>
+      { 
+      token?(
+        <div className="alert alert-success">
+         Authenticated  name:{username} nomer:{nomer}
+        </div>
+        ):(
+          <div className="alert alert-danger">
+          Not Authenticated
+       </div>
+        )
+   
+      }
+      {/* utk token juga tombol logout akan munculjika true dan snaliknya  */}
+    
+     {
+      token?(
+<button className='btn btn-danger' onClick={logout}>logout</button>
+      ):(
+<button className='btn btn-primary' onClick={login}>Login</button> 
+      )
+     }
+   
 
-    <div className="alert alert-danger">
-       Not Authenticated
-    </div>
-
-    <div className="alert alert-success">
-       Not Authenticated
-    </div>
-    <button className='btn btn-primary'>Login</button> &nbsp;
-    <button className='btn btn-danger'>logout</button>
+   
+    
+    
 
     </h3>
   )

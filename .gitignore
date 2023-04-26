@@ -8,6 +8,7 @@
 # testing
 /coverage
 catatan.txt
+catatan2.txt
 
 # production
 /build

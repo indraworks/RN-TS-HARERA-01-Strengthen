@@ -1,42 +1,25 @@
-import {useEffect,useState} from 'react'
-import { ReqResApi } from '../api/ReqRes'
-import { ReqRestList, UsersIO } from '../interfaces/ReqRes';
+
+
+import {  UsersIO } from '../interfaces/ReqRes';
+import { useUser } from '../hooks/useUser';
 
 
 
 export const Users = () => {
-   const [dataUser,setDataUser] = useState<UsersIO[]>([])
+   const {userData,PageNext,PagePrevious} = useUser()
 
-    useEffect(()=> {
-      LoadUser()
-    },[])
-
-
-    //loadUser /CargarUsuorio
-    const LoadUser = async()=> {
-    
-    
-      const resp = await ReqResApi.get<ReqRestList>("/users") 
-        setDataUser(resp.data.data)
-
-      
-    }
-
-
-     const renderItem=({id,avatar,first_name,last_name,email}:UsersIO)=> {
-            
-      return ( 
-           
-           <tr key={id}>
-            <td><img src={avatar} alt="firstname" style={{width:"45px",borderRadius:"50%"}} /></td>
-             <td>{first_name} {last_name}</td>
-            <td>{email}</td>
-          </tr>
-          
-        
-       )
-     }
-
+   const renderItem=({id,avatar,first_name,last_name,email}:UsersIO)=> {
+             
+    return ( 
+     
+         <tr key={id}>
+         <td><img src={avatar} alt="firstname" style={{width:"45px",borderRadius:"50%"}} /></td>
+         <td>{first_name} {last_name}</td>
+         <td>{email}</td>
+         </tr>
+             
+         )
+   }
   return (
     <>
      <h3>Users:</h3>
@@ -63,7 +46,7 @@ export const Users = () => {
              //pagina anterior previous page 
              //cargar usuaros = load user
              //no hay mas registros no more records
-          dataUser.map(renderItem)
+          userData.map(renderItem)
           }
           
 
@@ -72,9 +55,17 @@ export const Users = () => {
    
         <button 
         className='btn btn-primary mt-2'
-        onClick={LoadUser}   
+        onClick={PageNext}   
           >
             next
+        </button>
+         
+        &nbsp;&nbsp;
+        <button 
+        className='btn btn-primary mt-2'
+        onClick={PagePrevious}   
+          >
+            previous
         </button>
     </>
   )

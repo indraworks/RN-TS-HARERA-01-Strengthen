@@ -1,11 +1,13 @@
 import React from 'react'
 import { Users } from './components/Users'
 
+
 // import { BasicTypo } from './mytypescript/BasicTypo';
 // import ObjectLiteral from './mytypescript/ObjectLiteral';
 // import BasicFunction from './mytypescript/BasicFunction';
 // import { HookState } from './mytypescript/HookState';
 // import {Login} from './components/Login';
+import FormExample from './components/FormExample';
 
 
 const App = () => {
@@ -18,7 +20,8 @@ const App = () => {
       {/* <BasicFunction/> */}
       {/* <HookState/> */}
       {/* <Login/> */}
-      <Users/>
+      {/* <Users/> */}
+      <FormExample/>
 
     </div>
   )

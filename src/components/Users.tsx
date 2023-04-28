@@ -8,17 +8,34 @@ export const Users = () => {
    const [dataUser,setDataUser] = useState<UsersIO[]>([])
 
     useEffect(()=> {
-      //ambil apinya dgn masukan validasi utk api smua data interface yaitu 
-      //ReqResList
-      ReqResApi.get<ReqRestList>("/users") 
-      .then(resp =>{ //utk hasil kita lewatkan param response
-        //console.log(resp.data.data)
-        setDataUser(resp.data.data)
-      })
-      .catch(console.log)
+      LoadUser()
     },[])
 
 
+    //loadUser /CargarUsuorio
+    const LoadUser = async()=> {
+    
+    
+      const resp = await ReqResApi.get<ReqRestList>("/users") 
+        setDataUser(resp.data.data)
+
+      
+    }
+
+
+     const renderItem=({id,avatar,first_name,last_name,email}:UsersIO)=> {
+            
+      return ( 
+           
+           <tr key={id}>
+            <td><img src={avatar} alt="firstname" style={{width:"45px",borderRadius:"50%"}} /></td>
+             <td>{first_name} {last_name}</td>
+            <td>{email}</td>
+          </tr>
+          
+        
+       )
+     }
 
   return (
     <>
@@ -33,20 +50,32 @@ export const Users = () => {
         </thead>
         <tbody>
           {
-            dataUser.map(user=>(
-              <tr key={user.id}>
-            <td><img src={user.avatar} alt="user.firstname" style={{width:"45px",borderRadius:"50%"}} /></td>
-            <td>{user.first_name} {user.last_name}</td>
-            <td>{user.email}</td>
-          </tr>
-            ))
+            //  const {id,avatar,first_name,last_name} = dataUser
+          //   dataUser.map(user=>(
+              
+          //     <tr key={user.id}>
+          //   <td><img src={user.avatar} alt="user.firstname" style={{width:"45px",borderRadius:"50%"}} /></td>
+          //   <td>{user.first_name} {user.last_name}</td>
+          //   <td>{user.email}</td>
+          // </tr>
+          //   ))
+            //pagina siguente = next page
+             //pagina anterior previous page 
+             //cargar usuaros = load user
+             //no hay mas registros no more records
+          dataUser.map(renderItem)
           }
           
 
         </tbody>
      </table>
    
-    
+        <button 
+        className='btn btn-primary mt-2'
+        onClick={LoadUser}   
+          >
+            next
+        </button>
     </>
   )
 }

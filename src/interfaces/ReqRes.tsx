@@ -39,10 +39,26 @@ bisa langsung atau bisa caranya di buat function dan "direferensikan"
 
 /*
 mapping cara langsung
+<tbody>
+          {
+            //  const {id,avatar,first_name,last_name} = dataUser
+            dataUser.map(user=>(
+              
+              <tr key={user.id}>
+            <td><img src={user.avatar} alt="user.firstname" style={{width:"45px",borderRadius:"50%"}} /></td>
+            <td>{user.first_name} {user.last_name}</td>
+            <td>{user.email}</td>
+          </tr>
+            ))
+          }
+          
+
+        </tbody>
 */
 
 /*
 maing direferensikan 
+
 
 
 */

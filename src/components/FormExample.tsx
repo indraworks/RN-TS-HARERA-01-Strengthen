@@ -1,21 +1,13 @@
-import React, { useState } from 'react'
+
+import { UseForm } from '../hooks/UseForm'
+
 
 const FormExample = () => {
-    const [myForm,setMyForm] = useState({
-       email:"indrasuryawan@gmail.com",
-       password:"indra123" 
-    })
-
-    //utk onChange kita buat event functional 
-    //nah disini ada2 yg dimasukin sbgai param 1 property dan valuenya 
-    //sbb:
-    const OnMyChange =(value:string,prop:string)=>{
-        setMyForm({
-            ...myForm,
-            [prop]:value
-        }
-            )
-    }
+  //argForm kita masukan juga  yg mewakili T 
+ const {argForm,email,password,OnMyChange} = UseForm(
+  {email:"indrasuryawan@gmail.com",
+  password:"goyang123"}
+ )
 
   return (
     <>
@@ -24,7 +16,7 @@ const FormExample = () => {
      <input type="text"
      className='form-control'
       placeholder='Email'
-      value={myForm.email}
+      value={email}
       onChange={(e)=>OnMyChange(e.target.value,'email')}
       //diatas e atau event bisa kita ganti dgn sbgalh kiri (e)=> diganti didestruct
       //dgnan ({target})=> OnMyChange(target.value,'email')
@@ -33,12 +25,12 @@ const FormExample = () => {
      <input type="text"
      className='form-control mt-2 mb-4'
       placeholder='Password'
-      value={myForm.password}
+      value={password}
       onChange={(e)=>OnMyChange(e.target.value,'password')}
      />
      <code>
         <pre>
-          {JSON.stringify(myForm,null,2)}
+          {JSON.stringify(argForm,null,2)}
         </pre>
       </code> 
 

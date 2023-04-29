@@ -31,11 +31,17 @@ const FormExample = () => {
 
      />
      <input type="text"
-     className='form-control'
+     className='form-control mt-2 mb-4'
       placeholder='Password'
       value={myForm.password}
       onChange={(e)=>OnMyChange(e.target.value,'password')}
      />
+     <code>
+        <pre>
+          {JSON.stringify(myForm,null,2)}
+        </pre>
+      </code> 
+
     
     </>
   )
